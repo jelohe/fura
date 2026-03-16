@@ -1,10 +1,13 @@
 defmodule Fura.Scanner do
-  @timeout 1000
-  @timeout_buffer @timeout + 100
+  @port_timeout 1000
+  @concurrency 300
+  @task_timeout :infinity
 
   def probe(host, port) when is_integer(port) do
-    case Fura.Tcp.connect(host, port, [], @timeout) do
-      {:ok, _} -> {port, :open}
+    case Fura.Tcp.connect(host, port, [], @port_timeout) do
+      {:ok, socket} -> 
+        Fura.Tcp.close(socket)
+        {port, :open}
       {:error, _} -> {port, :closed}
     end
   end
@@ -13,8 +16,8 @@ defmodule Fura.Scanner do
     range
     |> Task.async_stream(
       fn port -> probe(host, port) end,
-      max_concurrency: 100,
-      timeout: @timeout_buffer
+      max_concurrency: @concurrency,
+      timeout: @task_timeout
     )
     |> Enum.map(fn {:ok, result} -> result end)
     |> Enum.filter(fn {_port, result} -> result == :open end)
