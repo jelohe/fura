@@ -1,0 +1,1 @@
+config :fura, :socket, SocketMock
