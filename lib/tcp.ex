@@ -10,7 +10,7 @@ defmodule Fura.Tcp do
     impl().connect(host, port, options, timeout)
   end
   defp impl do
-    Application.get_env(:fura, :tcp, RealImpl)
+    Application.get_env(:fura, :tcp, Fura.Tcp.RealImpl)
   end
 end
 
