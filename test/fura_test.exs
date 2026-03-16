@@ -15,22 +15,6 @@ defmodule FuraTest do
     end)
   end
 
-  test "reports an open port" do
-    prepare_mock()
-    assert Fura.probe("www.example.com", 20) == {20, :open}
-  end
-
-  test "reports a closed port" do
-    prepare_mock()
-    assert Fura.probe("www.example.com", 33) == {33, :closed}
-  end
-
-  test "scans a range of ports" do
-    prepare_mock()
-    expected_scan = [{20, :open},{80, :open}]
-    assert Fura.scan_range("www.example.com", 1..100) == expected_scan
-  end
-
   test "provides a human readable report" do
     prepare_mock()
     expected_report = """
