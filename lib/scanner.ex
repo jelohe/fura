@@ -1,7 +1,8 @@
 defmodule Fura.Scanner do
-  @port_timeout 1000
+  @port_timeout 200
   @concurrency 300
   @task_timeout :infinity
+  @full_range 1..65535
 
   def probe(host, port) when is_integer(port) do
     case Fura.Tcp.connect(host, port, [], @port_timeout) do
@@ -11,6 +12,9 @@ defmodule Fura.Scanner do
       {:error, _} -> {port, :closed}
     end
   end
+
+  def scan_range(host), do: scan_range(host, @full_range)
+  def scan_range(host, range) when range == nil, do: scan_range(host)
 
   def scan_range(host, range) do
     range

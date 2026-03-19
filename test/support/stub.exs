@@ -3,7 +3,7 @@ defmodule Fura.Test.Stub do
 
   def setup() do
     stub(Fura.MockTcp, :connect, fn (_host, port, _options, _timeout) ->
-        if (port == 20 or port == 80) do
+        if (port == 20 or port == 80 or port == 65535) do
           {:ok, :fake_socket}
         else
           {:error, :closed}

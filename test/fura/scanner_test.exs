@@ -14,6 +14,12 @@ defmodule ScannerTest do
     assert Fura.Scanner.probe("www.example.com", 33) == {33, :closed}
   end
 
+  test "scans every port" do
+    Fura.Test.Stub.setup()
+    expected_scan = [{20, :open},{80, :open},{65535, :open}]
+    assert Fura.Scanner.scan_range("www.example.com") == expected_scan
+  end
+
   test "scans a range of ports" do
     Fura.Test.Stub.setup()
     expected_scan = [{20, :open},{80, :open}]

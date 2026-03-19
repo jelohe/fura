@@ -1,10 +1,15 @@
 defmodule Fura do
-  def scan(host, range) when is_binary(host) do
-    scan(to_charlist(host), range)
+  def scan(host, range \\ nil) do
+    host
+    |> normalize_host
+    |> Fura.Scanner.scan_range(range)
+    |> to_human
   end
-  def scan(host, range) do
-    Fura.Scanner.scan_range(host, range) |> to_human
-  end
+
+  def normalize_host(host) when is_binary(host),
+    do: to_charlist(host)
+  def normalize_host(host),
+    do: host
 
   defp to_human(opened_ports) do
     opened_ports
