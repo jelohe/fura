@@ -6,7 +6,7 @@ defmodule Fura.Test.Stub do
         if (port == 20 or port == 80 or port == 65535) do
           {:ok, :fake_socket}
         else
-          {:error, :closed}
+          {:error, :econnrefused}
         end
       end)
 

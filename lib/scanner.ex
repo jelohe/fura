@@ -6,10 +6,11 @@ defmodule Fura.Scanner do
 
   def probe(host, port) when is_integer(port) do
     case Fura.Tcp.connect(host, port, [], @port_timeout) do
-      {:ok, socket} -> 
-        Fura.Tcp.close(socket)
+      {:ok, socket} -> Fura.Tcp.close(socket)
         {port, :open}
-      {:error, _} -> {port, :closed}
+      {:error, :econnrefused} -> {port, :closed}
+      {:error, :timeout} -> {port, :filtered}
+      {:error, _} -> {port, :error}
     end
   end
 
